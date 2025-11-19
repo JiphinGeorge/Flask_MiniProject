@@ -7,38 +7,21 @@
 
     <link rel="stylesheet" href="/static/style.css">
 
-    <!-- Load saved theme -->
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedTheme = localStorage.getItem("theme-mode") || "dark";
-            document.body.classList.add(savedTheme);
-        });
-
         function toggleDark() {
-            // If dark → switch to light
-            if (document.body.classList.contains("dark")) {
-                document.body.classList.remove("dark");
-                document.body.classList.add("light");
-                localStorage.setItem("theme-mode", "light");
-            }
-            // If light → switch to dark
-            else {
-                document.body.classList.remove("light");
-                document.body.classList.add("dark");
-                localStorage.setItem("theme-mode", "dark");
-            }
+            document.body.classList.toggle("light");
         }
     </script>
 </head>
 
-<body>
+<body class="royal-theme">
 
-<!-- Theme Toggle Button -->
 <button class="theme-toggle" onclick="toggleDark()">☀</button>
 
 <div class="container">
 
     <h1 class="title-gold">🔍 Premium Plagiarism Checker</h1>
+
     <p class="sub-text">Experience the next-level AI plagiarism detection</p>
 
     {% if error %}
@@ -50,7 +33,7 @@
         <label class="label-gold">Enter text</label>
         <textarea name="input_text" rows="7" placeholder="Paste your content here..."></textarea>
 
-        <div class="divider" style="text-align:center; color:#777; margin:15px 0;">— or —</div>
+        <div class="divider">or</div>
 
         <label class="label-gold">Upload TXT / PDF</label>
         <input type="file" name="file" class="file-box">
