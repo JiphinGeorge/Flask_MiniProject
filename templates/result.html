@@ -3,115 +3,141 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Plagiarism Results</title>
+    <title>Plagiarism Report</title>
 
     <link rel="stylesheet" href="/static/style.css">
-
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Theme Loader -->
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme-mode") || "dark";
+            document.body.classList.add(savedTheme);
+        });
+
         function toggleDark() {
-            document.body.classList.toggle("light");
+            if (document.body.classList.contains("dark")) {
+                document.body.classList.remove("dark");
+                document.body.classList.add("light");
+                localStorage.setItem("theme-mode", "light");
+            } else {
+                document.body.classList.remove("light");
+                document.body.classList.add("dark");
+                localStorage.setItem("theme-mode", "dark");
+            }
         }
     </script>
+
+    <style>
+        /* Extra gauge gold animation */
+        .gauge-ring {
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1.2s ease;
+        }
+    </style>
 </head>
 
-<body class="royal-theme">
+<body>
 
 <button class="theme-toggle" onclick="toggleDark()">☀</button>
 
 <div class="container">
 
-    <h1 class="title-gold">📊 Plagiarism Report</h1>
+    <h1 class="title-gold">📊 Premium Plagiarism Report</h1>
 
-    <!-- FULL ROUND GAUGE -->
     {% set score = similarities[0].score * 100 %}
+
+    <!-- GOLD SCORE GAUGE -->
     <div class="gauge-wrapper">
-        <canvas id="scoreGauge" width="250" height="250"></canvas>
-        <div class="gauge-label">{{ '%.0f'|format(score) }}%</div>
+        <svg width="250" height="250">
+            <circle cx="125" cy="125" r="100" stroke="#333" stroke-width="18" fill="none" />
+            <circle id="gaugeFill" cx="125" cy="125" r="100"
+                stroke="gold"
+                stroke-width="18"
+                fill="none"
+                class="gauge-ring"
+                stroke-dasharray="628"
+                stroke-dashoffset="628" />
+        </svg>
+        <div class="gauge-label">{{ "%.0f"|format(score) }}%</div>
     </div>
 
     <script>
-        const ctx = document.getElementById("scoreGauge");
-        const percentage = {{ score | round(0) }};  
+        let finalValue = {{ score }};
+        let offset = 628 - (628 * finalValue / 100);
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("gaugeFill").style.strokeDashoffset = offset;
+        });
+    </script>
 
-        new Chart(ctx, {
-            type: "doughnut",
+    <!-- USER INPUT -->
+    <h2 class="section-title">📝 Your Input</h2>
+    <pre class="input-text">{{ input_text }}</pre>
+
+
+    <!-- PIE CHART -->
+    <h2 class="section-title">📈 Document Similarity Breakdown</h2>
+
+    <canvas id="similarityPie" width="300" height="300" style="margin:auto;"></canvas>
+
+    <script>
+        const docs_001 = {{ similarities | map(attribute='doc') | list | tojson }};
+        const scores_001 = {{ similarities | map(attribute='score') | list | tojson }};
+        const percent_001 = scores_001.map(v => v * 100);
+
+        new Chart(document.getElementById("similarityPie"), {
+            type: "pie",
             data: {
-                labels: ["Plagiarism"],
+                labels: docs_001,
                 datasets: [{
-                    data: [percentage, 100 - percentage],
-                    borderWidth: 0,
-                    cutout: "70%",
-                    backgroundColor: [
-                        percentage < 30 ? "#2ecc71" :
-                        percentage < 60 ? "#f1c40f" :
-                        "#e74c3c",
-                        "#2b2b2b"
-                    ]
+                    data: percent_001,
+                    backgroundColor: ["#ffcc44", "#ffaa00", "#ffdd77", "#ffeeaa"]
                 }]
             },
             options: {
-                plugins: { legend: { display: false } },
-                rotation: -90,
-                circumference: 360
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: "white" }
+                    }
+                }
             }
         });
     </script>
 
-    <!-- Download PDF -->
-    <center>
-        <a href="/download_pdf">
-            <button class="gold-btn">⬇ Download Premium PDF</button>
-        </a>
-    </center>
 
-    <br><br>
-
-    <!-- PIE CHART SECTION -->
-    <h2 class="section-title">Similarity Distribution</h2>
-    <canvas id="pieChart" width="350" height="350"></canvas>
-
-    <script>
-        const labels_safe = {{ similarities | map(attribute='doc') | list | tojson }};
-        const scores_safe = {{ similarities | map(attribute='score') | list | tojson }};
-        const scores_percent_safe = scores_safe.map(v => v * 100);
-
-        new Chart(document.getElementById("pieChart"), {
-            type: "pie",
-            data: {
-                labels: labels_safe,
-                datasets: [{
-                    data: scores_percent_safe
-                }]
-            }
-        });
-    </script>
-
-    <!-- USER TEXT -->
-    <h2 class="section-title">Your Input</h2>
-    <pre class="input-text">{{ input_text }}</pre>
-
-    <!-- SCORES LIST -->
-    <h2 class="section-title">Similarity Scores</h2>
+    <!-- SIMILARITY LIST -->
+    <h2 class="section-title">📄 Similarity Scores</h2>
     <ul>
         {% for s in similarities %}
-            <li><b>{{ s.doc }}</b> — {{ '%.2f'|format(s.score * 100) }}%</li>
+            <li class="label-gold">
+                ⭐ {{ s.doc }} — {{ "%.2f"|format(s.score * 100) }}%
+            </li>
         {% endfor %}
     </ul>
 
-    <!-- HIGHLIGHTS -->
-    <h2 class="section-title">Highlighted Matches</h2>
+
+    <!-- HIGHLIGHTED MATCHES -->
+    <h2 class="section-title">✨ Highlighted Matches</h2>
 
     {% for h in highlights %}
-        <h3 class="highlight-title">{{ h.doc }} — {{ '%.2f'|format(h.score * 100) }}%</h3>
+        <h3 class="label-gold">{{ h.doc }} — {{ "%.2f" | format(h.score * 100) }}%</h3>
         <div class="highlight-box">{{ h.highlighted | safe }}</div>
     {% endfor %}
 
-    <center>
-        <a href="{{ url_for('index') }}"><button class="gold-btn">🔁 Check Another</button></a>
-    </center>
+
+    <!-- BUTTONS -->
+    <div style="text-align:center; margin-top:25px;">
+        <a href="{{ url_for('index') }}">
+            <button class="gold-btn">🔁 Check Another</button>
+        </a>
+
+        <a href="/download_pdf">
+            <button class="gold-btn" style="margin-left:10px;">📄 Download PDF Report</button>
+        </a>
+    </div>
 
 </div>
 

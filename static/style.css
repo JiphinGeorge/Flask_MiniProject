@@ -1,13 +1,15 @@
-/* GLOBAL */
-body.royal-theme {
-    background: #000;
-    color: #f5f5f5;
+/* -------------------------------------------
+   BASE GOLD THEME (applies in both modes)
+------------------------------------------- */
+
+body {
     font-family: "Inter", sans-serif;
     margin: 0;
     padding: 0;
+    transition: background 0.3s, color 0.3s;
 }
 
-/* GOLD THEME */
+/* GOLD TEXT STYLES */
 .title-gold {
     font-size: 34px;
     text-align: center;
@@ -28,34 +30,6 @@ body.royal-theme {
     color: #bbbbbb;
 }
 
-/* MAIN WRAPPER */
-.container {
-    max-width: 900px;
-    background: rgba(20, 20, 20, 0.8);
-    border: 1px solid #463400;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 20px rgba(255,215,0,0.2);
-    margin: 50px auto;
-    padding: 30px;
-    border-radius: 18px;
-}
-
-/* INPUTS */
-textarea, input[type=file] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    background: #111;
-    color: white;
-    border: 1px solid #333;
-    border-radius: 8px;
-}
-
-textarea:focus {
-    border-color: #ffb300;
-    outline: none;
-}
-
 /* GOLD BUTTON */
 .gold-btn {
     background: linear-gradient(90deg, #ffcc44, #ffb300);
@@ -73,22 +47,9 @@ textarea:focus {
     filter: brightness(0.9);
 }
 
-/* DARK MODE SWITCH */
-.theme-toggle {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    background: #222;
-    color: gold;
-    border: 1px solid #444;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-/* HIGHLIGHTS */
+/* Highlight boxes */
 .highlight-box {
-    background: #151515;
+    background: rgba(0, 0, 0, 0.2);
     border: 1px solid #444;
     padding: 16px;
     border-radius: 10px;
@@ -101,13 +62,23 @@ mark {
     border-radius: 3px;
 }
 
-/* RESULTS TITLES */
-.section-title {
-    color: #ffcc44;
-    margin-top: 20px;
+/* File input & text boxes */
+textarea,
+input[type=file] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    transition: 0.3s;
 }
 
-/* FULL ROUND GAUGE */
+textarea:focus {
+    border-color: #ffb300;
+    outline: none;
+}
+
+/* Animated Score Gauge */
 .gauge-wrapper {
     position: relative;
     width: 250px;
@@ -125,11 +96,75 @@ mark {
     color: gold;
 }
 
-/* INPUT TEXT BOX */
 .input-text {
-    background: #111;
     padding: 16px;
     border-radius: 10px;
     border: 1px solid #333;
     white-space: pre-wrap;
+}
+
+/* -------------------------------------------
+        🌙 DARK MODE (Default)
+------------------------------------------- */
+body.dark {
+    background: #000;
+    color: #f5f5f5;
+}
+
+.dark .container {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #463400;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.dark textarea,
+.dark input[type=file],
+.dark .input-text {
+    background: #111;
+    color: white;
+}
+
+/* -------------------------------------------
+        ☀ LIGHT MODE
+------------------------------------------- */
+body.light {
+    background: #fff7e6;
+    color: #000;
+}
+
+.light .container {
+    background: #ffffff;
+    border: 1px solid #ffe08a;
+    box-shadow: 0 0 20px rgba(255, 200, 0, 0.15);
+}
+
+.light textarea,
+.light input[type=file],
+.light .input-text {
+    background: #fff;
+    border: 1px solid #ffc94d;
+    color: #000;
+}
+
+/* -------------------------------------------
+        ☀🌙 Theme Toggle Button
+------------------------------------------- */
+.theme-toggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #222;
+    color: gold;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.light .theme-toggle {
+    background: #fff;
+    color: #000;
+    border-color: #ffbd3c;
 }
