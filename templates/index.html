@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plagiarism Checker</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <script>
+      // Dark mode toggle
+      function toggleDark() {
+        document.body.classList.toggle('dark');
+      }
+
+      // Show loading animation
+      function showLoader() {
+        document.getElementById("loader").style.display = "flex";
+      }
+    </script>
+  </head>
+
+  <body>
+
+    <!-- 🌙 Dark Mode Button -->
+    <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+
+    <!-- Loader Overlay -->
+    <div id="loader" class="loader-overlay" style="display:none;">
+      <div class="spinner"></div>
+      <p style="color:white;">Checking plagiarism...</p>
+    </div>
+
+    <div class="container fade-in">
+      <h1>🔍 Plagiarism Checker</h1>
+
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data" onsubmit="showLoader()">
+        <label><b>Paste your text:</b></label>
+        <textarea name="input_text" rows="8" placeholder="Enter your text here..."></textarea>
+
+        <p><b>Or upload a file (TXT / PDF):</b></p>
+        <input type="file" name="file" accept=".txt,.pdf">
+
+        <button type="submit">Check Plagiarism 🚀</button>
+      </form>
+
+      <hr>
+
+      <h3>📄 Reference Documents</h3>
+      <p>Place <code>.txt</code> files inside the <b>documents/</b> folder.</p>
+    </div>
+
+  </body>
+</html>

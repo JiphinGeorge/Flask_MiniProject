@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plagiarism Results</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      function toggleDark() {
+        document.body.classList.toggle('dark');
+      }
+    </script>
+  </head>
+
+  <body>
+
+    <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+
+    <div class="container fade-in">
+
+      <h1>📊 Plagiarism Report</h1>
+
+      {% set score = similarities[0].score * 100 if similarities else 0 %}
+      <div class="circle-wrapper">
+        <div class="circle 
+          {% if score < 30 %} green 
+          {% elif score < 60 %} orange 
+          {% else %} red {% endif %}
+        ">
+          {{ "%.0f"|format(score) }}%
+        </div>
+      </div>
+
+      <h2>🥧 Similarity Pie Chart</h2>
+      <canvas id="similarityPie"></canvas>
+
+      <script type="module">
+        // 🔥 UNIQUE VARIABLE NAMES (zero conflicts possible)
+        const labels_safe_001 = {{ similarities | map(attribute='doc') | list | tojson }};
+        const scores_safe_001 = {{ similarities | map(attribute='score') | list | tojson }};
+        const scores_percent_safe_001 = scores_safe_001.map(v => v * 100);
+
+        new Chart(document.getElementById("similarityPie"), {
+          type: "pie",
+          data: {
+            labels: labels_safe_001,
+            datasets: [{
+              data: scores_percent_safe_001,
+              backgroundColor: [
+                "#4a76ff",
+                "#ff6384",
+                "#36a2eb",
+                "#ffcd56",
+                "#2ecc71",
+                "#e74c3c"
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true
+          }
+        });
+      </script>
+
+      <h2>Your Input</h2>
+      <pre class="input-text">{{ input_text }}</pre>
+
+      <h2>Similarity Scores</h2>
+      <ul>
+        {% for s in similarities %}
+        <li><b>{{ s.doc }}</b> — {{ "%.2f"|format(s.score * 100) }}%</li>
+        {% endfor %}
+      </ul>
+
+      <h2>Highlighted Matches</h2>
+      {% for h in highlights %}
+      <h3>{{ h.doc }} — {{ "%.2f"|format(h.score * 100) }}%</h3>
+      <div class="highlight-box">{{ h.highlighted | safe }}</div>
+      {% endfor %}
+
+      <center>
+        <a href="{{ url_for('index') }}"><button>Check Another</button></a>
+      </center>
+
+    </div>
+  </body>
+</html>
