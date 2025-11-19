@@ -1,165 +1,95 @@
-/* ---------------------------------------------------
-   Light & Dark Mode Variables
---------------------------------------------------- */
+/* Light & Dark Mode Variables */
 :root {
   --bg: #eef3ff;
-  --text: #2c3e50;
   --card: #ffffff;
+  --text: #2c3e50;
   --border: #d0d7e6;
   --accent: #4a76ff;
 }
 
-.dark {
+body.dark {
   --bg: #0f1116;
-  --text: #f3f6ff;
   --card: #1a1d23;
+  --text: #f3f6ff;
   --border: #3c4352;
   --accent: #729dff;
 }
 
-/* ---------------------------------------------------
-   Base Layout
---------------------------------------------------- */
 body {
-  margin: 0;
-  padding: 0;
+  font-family: "Inter", sans-serif;
   background: var(--bg);
   color: var(--text);
-  font-family: Inter, Arial, sans-serif;
-  transition: 0.3s ease-in-out;
+  margin: 0;
+  padding: 0;
+  transition: 0.3s;
 }
 
 .container {
   max-width: 900px;
-  margin: 40px auto;
+  margin: 35px auto;
   background: var(--card);
   padding: 32px;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
-/* Fade animation */
-.fade-in {
-  animation: fadeIn 0.6s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ---------------------------------------------------
-   Typography
---------------------------------------------------- */
 h1 {
   text-align: center;
-  font-size: 32px;
-  margin-bottom: 20px;
+  font-size: 30px;
 }
 
-textarea {
+textarea, pre.input-text {
   width: 100%;
+  background: #f4f7ff;
   padding: 14px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: #f8faff;
+  font-size: 15px;
 }
 
-/* ---------------------------------------------------
-   Buttons
---------------------------------------------------- */
 button {
-  padding: 12px 20px;
-  font-size: 16px;
   background: var(--accent);
   border: none;
+  padding: 12px 20px;
   border-radius: 10px;
-  cursor: pointer;
   color: white;
+  font-size: 15px;
+  cursor: pointer;
   transition: 0.3s;
 }
 
 button:hover {
-  box-shadow: 0 0 10px var(--accent);
+  filter: brightness(0.9);
 }
 
-.dark-toggle {
+.highlight-box {
+  padding: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+mark {
+  background: #ffe348;
+  border-radius: 4px;
+}
+
+.theme-btn {
   position: fixed;
   top: 20px;
   right: 20px;
+  background: var(--accent);
   padding: 10px 14px;
   border-radius: 50%;
-  font-size: 20px;
-  border: none;
-  background: var(--accent);
-  color: white;
+  color: #fff;
+  font-size: 18px;
   cursor: pointer;
 }
 
-/* ---------------------------------------------------
-   Loader Overlay
---------------------------------------------------- */
-.loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 15, 20, 0.85);
+.center-btn {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 9999;
-}
-
-.spinner {
-  width: 55px;
-  height: 55px;
-  border: 6px solid #999;
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ---------------------------------------------------
-   Sections
---------------------------------------------------- */
-hr {
-  border: 0;
-  border-bottom: 1px solid var(--border);
-  margin: 30px 0;
-}
-
-.error {
-  color: #e74c3c;
-  font-weight: bold;
-  text-align: center;
-}
-
-/* ---------------------------------------------------
-   Responsive
---------------------------------------------------- */
-@media (max-width: 600px) {
-  .container {
-    padding: 20px;
-    margin: 20px;
-  }
-
-  textarea {
-    font-size: 14px;
-  }
-
-  button {
-    width: 100%;
-  }
-
-  .dark-toggle {
-    right: 10px;
-    top: 10px;
-  }
+  gap: 20px;
+  margin-top: 30px;
 }
