@@ -2,6 +2,7 @@ import os
 import re
 import nltk
 
+
 # Force NLTK to use local project nltk_data folder
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 NLTK_PATH = os.path.join(os.path.dirname(BASE_DIR), "nltk_data")
